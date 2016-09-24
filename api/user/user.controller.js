@@ -1,3 +1,52 @@
+const models = require('../../models');
+
+exports.create = (req, res) => {
+  const name = req.body.name || '';
+  
+  if (!name.length) {
+    return res.status(400).json({error: 'Incorrenct name'});
+  }
+
+  models.User.create({
+    name: name
+  }).then((user) => res.status(201).json(user));
+};
+
+exports.index = (req, res) => {
+  models.User.findAll()
+      .then(users => res.json(users));
+};
+
+exports.show = (req, res) => {
+  const id = req.params.id || '';
+
+  models.User.findOne({
+    where: {
+      id: id
+    }
+  }).then(user => {
+    if (!user) {
+      return res.status(404).json({error: 'No User'});
+    }
+
+    return res.json(user);
+  });
+};
+
+exports.destroy = (req, res) => {
+  const id = req.params.id || '';
+
+  models.User.destroy({
+    where: {
+      id: id
+    }
+  }).then( result => {
+    console.log(result);//삭제된 갯수
+    res.status(204).send()
+  });
+};
+
+/*
 let users = [
   {
     id: 1,
@@ -79,7 +128,7 @@ exports.create = (req, res) => {
     /*if (user.id > maxId) {
       maxId = user.id;
     }
-    return maxId;*/
+    return maxId;
   }, 0) + 1;//최대 id +1
 
   const newUser = {
@@ -91,3 +140,4 @@ exports.create = (req, res) => {
 
   res.status(201).json(newUser);
 }
+*/

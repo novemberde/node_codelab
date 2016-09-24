@@ -32,8 +32,13 @@ app.use(bodyParser.json());
 
 app.use('/users', require('./api/user'));//라우터 모듈 추가//index.js를 디폴트로 찾음.
 
+
 app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
+  require('./models').sequelize.sync({force: true})//기존의 db데이터를 유지하고 싶으면 false
+    .then(() => {
+      console.log('Databases sync');
+    });
 });
 
 
